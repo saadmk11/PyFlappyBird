@@ -135,7 +135,8 @@ class FlappyBirdGame:
             self.FLOOR_SURFACE, (self.floor_x_position, 900)
         )
         self.GAME_SCREEN.blit(
-            self.FLOOR_SURFACE, (self.floor_x_position + self.SCREEN_WIDTH, 900)
+            self.FLOOR_SURFACE,
+            (self.floor_x_position + self.SCREEN_WIDTH, 900)
         )
 
     def draw_background(self):
