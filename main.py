@@ -179,7 +179,7 @@ class FlappyBirdGame:
         if self.active:
             # Display score on the top center while the game is active
             score_surface = self.FONT.render(
-                str(int(self.score)), True, (255, 255, 255)
+                str(self.score), True, (255, 255, 255)
             )
             score_rect = score_surface.get_rect(
                 center=(self.SCREEN_WIDTH / 2, 100)
@@ -188,7 +188,7 @@ class FlappyBirdGame:
         else:
             # Display score on the top center and while the game is not active
             score_surface = self.FONT.render(
-                f'Your Score: {int(self.score)}', True, (255,255,255)
+                f'Your Score: {self.score}', True, (255,255,255)
             )
             score_rect = score_surface.get_rect(
                 center=(self.SCREEN_WIDTH / 2, 100)
