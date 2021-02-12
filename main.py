@@ -146,6 +146,12 @@ class FlappyBirdGame:
         """Draw background on the screen"""
         self.GAME_SCREEN.blit(self.BACKGROUND_SURFACE, (0, 0))
 
+    def draw_game_over_surface(self):
+        """Draw game over surface on the screen"""
+        self.GAME_SCREEN.blit(
+            self.GAME_OVER_SURFACE, self.GAME_OVER_RECT
+        )
+
     def move_bird(self):
         """Move the flappy bird on the screen"""
         # Increase movement by gravity so that the bird falls
@@ -257,9 +263,7 @@ class FlappyBirdGame:
                 self.display_score()
             else:
                 # Show Game over Screen
-                self.GAME_SCREEN.blit(
-                    self.GAME_OVER_SURFACE, self.GAME_OVER_RECT
-                )
+                self.draw_game_over_surface()
                 # Display Player Score on the screen
                 self.display_score()
 
