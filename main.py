@@ -184,24 +184,19 @@ class FlappyBirdGame:
 
     def display_score(self):
         """Display Score of the player on the screen"""
-        if self.active:
-            # Display score on the top center while the game is active
-            score_surface = self.GAME_FONT.render(
-                str(self.score), True, (255, 255, 255)
-            )
-            score_rect = score_surface.get_rect(
-                center=(self.SCREEN_WIDTH / 2, 100)
-            )
-            self.GAME_SCREEN.blit(score_surface, score_rect)
-        else:
-            # Display score on the top center and while the game is not active
-            score_surface = self.GAME_FONT.render(
-                f'Your Score: {self.score}', True, (255, 255, 255)
-            )
-            score_rect = score_surface.get_rect(
-                center=(self.SCREEN_WIDTH / 2, 100)
-            )
-            self.GAME_SCREEN.blit(score_surface, score_rect)
+        score_str = (
+            str(self.score)
+            if self.active
+            else f'Your Score: {self.score}'
+        )
+        # Display score on the top center of the screen
+        score_surface = self.GAME_FONT.render(
+            score_str, True, (255, 255, 255)
+        )
+        score_rect = score_surface.get_rect(
+            center=(self.SCREEN_WIDTH / 2, 100)
+        )
+        self.GAME_SCREEN.blit(score_surface, score_rect)
 
     def reset(self):
         """Reset the game to it's initial state"""
