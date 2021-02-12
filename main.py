@@ -223,6 +223,9 @@ class FlappyBirdGame:
             # Draw Game Background
             self.draw_background()
 
+            # Draw the moving floor
+            self.draw_floor()
+
             for event in pygame.event.get():
                 # Exit the game when the cross icon is clicked
                 if event.type == pygame.QUIT:
@@ -266,9 +269,6 @@ class FlappyBirdGame:
                 self.draw_game_over_surface()
                 # Display Player Score on the screen
                 self.display_score()
-
-            # Draw the moving floor
-            self.draw_floor()
 
             # Update the Display
             pygame.display.update()
