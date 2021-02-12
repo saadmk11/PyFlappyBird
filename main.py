@@ -5,7 +5,7 @@ import pygame
 
 
 class FlappyBirdGame:
-    """Implementation of the Flappy Bird Game"""
+    """Implementation of The Flappy Bird Game Using Python"""
 
     # pygame needs to be initialized 
     # before any method of the pygame module can be used
@@ -15,13 +15,16 @@ class FlappyBirdGame:
     CLOCK = pygame.time.Clock()
     
     # Game Font to display Score
-    FONT = pygame.font.Font('assets/font.ttf', 40)
+    GAME_FONT = pygame.font.Font('assets/font.ttf', 40)
     
     # Game screen Height and Weight
     SCREEN_HEIGHT = 1024
     SCREEN_WIDTH = 576
 
-    # The mail Game Screen
+    # Floor Height on The Screen
+    FLOOR_HEIGHT = 900
+
+    # The main Game Screen
     GAME_SCREEN = pygame.display.set_mode(
         (SCREEN_WIDTH, SCREEN_HEIGHT)
     )
@@ -42,11 +45,11 @@ class FlappyBirdGame:
     PIPE_SURFACE = pygame.transform.scale2x(
         pygame.image.load('assets/pipe-green.png').convert()
     )
-    # Game over screen of the Game
+    # Game over screen
     GAME_OVER_SURFACE = pygame.transform.scale2x(
         pygame.image.load('assets/message.png').convert_alpha()
     )
-    # Position the Game over Surface to Center using rectangle
+    # Position the Game over Surface on Center using rectangle
     GAME_OVER_RECT = GAME_OVER_SURFACE.get_rect(
         center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     )
@@ -54,10 +57,10 @@ class FlappyBirdGame:
     # Pipe Heights that will be chosen randomly
     PIPE_HEIGHT_CHOICES = [400, 600, 800]
 
-    # Speed at with the bird will fall
+    # Speed at which the bird will fall
     GRAVITY = 0.22
 
-    # Create a event that will be used in the timer
+    # Create an event that will be used in the timer
     # to spawn pipes on the screen
     SPAWN_PIPE = pygame.USEREVENT
     # Speed at which the pipes will spawn
@@ -66,7 +69,7 @@ class FlappyBirdGame:
     pygame.time.set_timer(SPAWN_PIPE, PIPE_SPEED)
 
     def __init__(self):
-        # State of the Game (active or not)
+        # State of the Game (running or game over)
         self.active = True
         # Score of the player
         self.score = 0
@@ -85,28 +88,27 @@ class FlappyBirdGame:
     def create_pipe(self):
         """Create top and bottom pipe and add to the pipe list"""
         # Randomly Select a pipe height
-        random_pipe_pos = random.choice(self.PIPE_HEIGHT_CHOICES)
+        random_pipe_position = random.choice(self.PIPE_HEIGHT_CHOICES)
         # Create Bottom Pipe
         bottom_pipe = self.PIPE_SURFACE.get_rect(
-            midtop=(700, random_pipe_pos)
+            midtop=(700, random_pipe_position)
         )
         # Create Top Pipe
         top_pipe = self.PIPE_SURFACE.get_rect(
-            midbottom=(700, random_pipe_pos - 300)
+            midbottom=(700, random_pipe_position - 300)
         )
-        # Add created pipes to the list
+        # Add created pipes to the pipe list
         self.pipe_list.extend([bottom_pipe, top_pipe])
 
     def move_pipes(self):
         """Moves pipes on the screen"""
-        # move pipes centerx by -5
+        # # move pipes centerx by -5
         for pipe in self.pipe_list:
             pipe.centerx -= 5
-        
-        # keep pipes only if the right is > -50
-        self.pipe_list = [
-            pipe for pipe in self.pipe_list if pipe.right > -50
-        ]
+
+            # keep pipes only if the right is > -50 (Outside of the screen)
+            if not pipe.right > -50:
+                self.pipe_list.remove(pipe)
 
     def draw_pipes(self):
         """Draw pipes on the screen"""
@@ -132,11 +134,11 @@ class FlappyBirdGame:
         # Add two floor surfaces together
         # and move them by -1 on each display update
         self.GAME_SCREEN.blit(
-            self.FLOOR_SURFACE, (self.floor_x_position, 900)
+            self.FLOOR_SURFACE, (self.floor_x_position, self.FLOOR_HEIGHT)
         )
         self.GAME_SCREEN.blit(
             self.FLOOR_SURFACE,
-            (self.floor_x_position + self.SCREEN_WIDTH, 900)
+            (self.floor_x_position + self.SCREEN_WIDTH, self.FLOOR_HEIGHT)
         )
 
     def draw_background(self):
@@ -151,15 +153,19 @@ class FlappyBirdGame:
         # Draw the bird
         self.GAME_SCREEN.blit(self.BIRD_SURFACE, self.bird_rect)
 
-    def check_collision(self):
+    def check_no_collision(self):
         """Check if the bird collided with any pipe 
         or fallen down or jumped above the screen"""
         for pipe in self.pipe_list:
+            # Check if the bird is colliding with any pipe
             if self.bird_rect.colliderect(pipe):
                 self.can_score = True
                 return False
-
-        if self.bird_rect.top <= -100 or self.bird_rect.bottom >= 900:
+        # Check if the bird is outside of the playable screen
+        if (
+            self.bird_rect.top <= -100 or
+            self.bird_rect.bottom >= self.FLOOR_HEIGHT
+        ):
             self.can_score = True
             return False
 
@@ -168,6 +174,7 @@ class FlappyBirdGame:
     def update_score(self):
         """Update Score of the player"""
         for pipe in self.pipe_list:
+            # Check if the bird is between the pipes
             if 95 < pipe.centerx < 105 and self.can_score:
                 self.score += 1
                 self.can_score = False
@@ -178,7 +185,7 @@ class FlappyBirdGame:
         """Display Score of the player on the screen"""
         if self.active:
             # Display score on the top center while the game is active
-            score_surface = self.FONT.render(
+            score_surface = self.GAME_FONT.render(
                 str(self.score), True, (255, 255, 255)
             )
             score_rect = score_surface.get_rect(
@@ -187,7 +194,7 @@ class FlappyBirdGame:
             self.GAME_SCREEN.blit(score_surface, score_rect)
         else:
             # Display score on the top center and while the game is not active
-            score_surface = self.FONT.render(
+            score_surface = self.GAME_FONT.render(
                 f'Your Score: {self.score}', True, (255,255,255)
             )
             score_rect = score_surface.get_rect(
@@ -242,7 +249,7 @@ class FlappyBirdGame:
                 # keep the bird moving (Jump/Fall) while the game is running
                 self.move_bird()
                 # Check for collision and set active state
-                self.active = self.check_collision()
+                self.active = self.check_no_collision()
 
                 # keep the pipes moving while the game is running
                 self.move_pipes()
