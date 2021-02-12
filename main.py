@@ -79,7 +79,7 @@ class FlappyBirdGame:
         self.pipe_list = []
         # Used to keep the floor moving
         self.floor_x_position = 0
-        self.can_score = True
+        self.score_lock = False
         # Create rectangle around the bird to easily detect collision
         self.bird_rect = self.BIRD_SURFACE.get_rect(
             center=(100, self.SCREEN_HEIGHT / 2)
@@ -160,14 +160,14 @@ class FlappyBirdGame:
         for pipe in self.pipe_list:
             # Check if the bird is colliding with any pipe
             if self.bird_rect.colliderect(pipe):
-                self.can_score = True
+                self.score_lock = False
                 return False
         # Check if the bird is outside of the playable screen
         if (
             self.bird_rect.top <= -100 or
             self.bird_rect.bottom >= self.FLOOR_HEIGHT
         ):
-            self.can_score = True
+            self.score_lock = False
             return False
 
         return True
@@ -176,11 +176,11 @@ class FlappyBirdGame:
         """Update Score of the player"""
         for pipe in self.pipe_list:
             # Check if the bird is between the pipes
-            if 95 < pipe.centerx < 105 and self.can_score:
+            if 95 < pipe.centerx < 105 and not self.score_lock:
                 self.score += 1
-                self.can_score = False
+                self.score_lock = True
             if pipe.centerx < 0:
-                self.can_score = True
+                self.score_lock = False
 
     def display_score(self):
         """Display Score of the player on the screen"""
@@ -210,7 +210,7 @@ class FlappyBirdGame:
         self.bird_movement = 0
         self.floor_x_position = 0
         self.pipe_list = []
-        self.can_score = True
+        self.score_lock = False
         self.bird_rect = self.BIRD_SURFACE.get_rect(
             center=(100, self.SCREEN_HEIGHT / 2)
         )
