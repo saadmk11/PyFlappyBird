@@ -102,7 +102,7 @@ class FlappyBirdGame:
 
     def move_pipes(self):
         """Moves pipes on the screen"""
-        # # move pipes centerx by -5
+        # # move pipes x center by -5
         for pipe in self.pipe_list:
             pipe.centerx -= 5
 
@@ -134,7 +134,8 @@ class FlappyBirdGame:
         # Add two floor surfaces together
         # and move them by -1 on each display update
         self.GAME_SCREEN.blit(
-            self.FLOOR_SURFACE, (self.floor_x_position, self.FLOOR_HEIGHT)
+            self.FLOOR_SURFACE,
+            (self.floor_x_position, self.FLOOR_HEIGHT)
         )
         self.GAME_SCREEN.blit(
             self.FLOOR_SURFACE,
@@ -195,12 +196,12 @@ class FlappyBirdGame:
         else:
             # Display score on the top center and while the game is not active
             score_surface = self.GAME_FONT.render(
-                f'Your Score: {self.score}', True, (255,255,255)
+                f'Your Score: {self.score}', True, (255, 255, 255)
             )
             score_rect = score_surface.get_rect(
                 center=(self.SCREEN_WIDTH / 2, 100)
             )
-            self.GAME_SCREEN.blit(score_surface,score_rect)
+            self.GAME_SCREEN.blit(score_surface, score_rect)
 
     def reset(self):
         """Reset the game to it's initial state"""
