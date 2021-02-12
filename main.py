@@ -216,7 +216,7 @@ class FlappyBirdGame:
         )
 
     def start(self):
-        """Entry Point to the same, Game starts when this method is invoked"""
+        """Entry Point to the Game, Game starts when this method is invoked"""
         # Game Event Loop
         while True:
             # Draw Game Background
