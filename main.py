@@ -31,7 +31,7 @@ class FlappyBirdGame:
 
     # Background of the Game
     BACKGROUND_SURFACE = pygame.transform.scale2x(
-        pygame.image.load('assets/background-night.png').convert()
+        pygame.image.load('assets/background-day.png').convert()
     )
     # Floor of the Game
     FLOOR_SURFACE = pygame.transform.scale2x(
@@ -39,11 +39,11 @@ class FlappyBirdGame:
     )
     # Bird
     BIRD_SURFACE = pygame.transform.scale2x(
-        pygame.image.load('assets/bluebird-midflap.png').convert_alpha()
+        pygame.image.load('assets/redbird-midflap.png').convert_alpha()
     )
     # Pipe
     PIPE_SURFACE = pygame.transform.scale2x(
-        pygame.image.load('assets/pipe-green.png').convert()
+        pygame.image.load('assets/pipe-red.png').convert()
     )
     # Game over screen
     GAME_OVER_SURFACE = pygame.transform.scale2x(
